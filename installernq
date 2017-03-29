@@ -3,7 +3,7 @@
 # Const Vars
 #############################################################
 DEFAULTINSTALLDIR="/opt/raspadmin"
-DEFAULTPORT="443"
+DEFAULTPORT="7443"
 CONFIGDIR="/etc/raspadmin"
 
 #############################################################
@@ -100,7 +100,6 @@ if [ -f /etc/raspadmin/raspadmin.conf ] ; then
 		installdir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "staticfiledir" | sed -e "s/static//g")
 fi
 
-if [ "$installdir" == "" ] ; then
 	installdir=$DEFAULTINSTALLDIR
 	port=$DEFAULTPORT
 	[[ ! -d $CONFIGDIR ]] && mkdir $CONFIGDIR
@@ -117,11 +116,8 @@ if [ "$installdir" == "" ] ; then
 #	certificate_path=""
 #	key_path=""
 
-
-	
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
 
-fi
 
 
 clear
