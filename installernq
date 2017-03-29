@@ -117,7 +117,7 @@ fi
 	key_path=""
 
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
-
+        cp conf/gpio.conf $CONFIGDIR/gpio.conf
 
 
 clear
@@ -138,6 +138,14 @@ echo ""
 echo "----- File copy"
 [[ -d "$installdir" ]] ||  mkdir $installdir
 cp -R sources/* $installdir
+
+#cd /home/pi/raspadmin/modules/gpio/conf
+#cp -Rf * /etc/raspadmin
+#cd /home/pi/raspadmin/modules/gpio/sources
+#mkdir /opt/raspadmin/modules/gpio
+#cp -Rf * /opt/raspadmin/modules/gpio
+#cd /home/pi/raspadmin/modules/gpio/templates
+#cp -Rf * /opt/raspadmin/templates
 
 echo "----- Right management"
 chown -R root:root $installdir
