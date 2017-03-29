@@ -60,21 +60,21 @@ dev=$?
 
 if [ "$pip" == "1" ]; then
 	echo "Installing pip"
-	apt-get install python-pip
+	apt-get install -y python-pip
 fi
 
 if [ "$dev" == "1" ]; then
         echo "Installing python-dev"
-        apt-get install python-dev
+        apt-get install -y python-dev
 
 fi
 
 echo "Installing needed libraries via pip"
-pip install quik
-pip install netifaces
-pip install RPi.GPIO
-pip install psutil
-pip install requests
+pip --quiet install quik
+pip --quiet install netifaces
+pip --quiet install RPi.GPIO
+pip --quiet install psutil
+pip --quiet install requests
 
 #############################################################
 # Asking question
