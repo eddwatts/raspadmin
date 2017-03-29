@@ -3,7 +3,7 @@
 # Const Vars
 #############################################################
 DEFAULTINSTALLDIR="/opt/raspadmin"
-DEFAULTPORT="443"
+DEFAULTPORT="7443"
 CONFIGDIR="/etc/raspadmin"
 
 #############################################################
