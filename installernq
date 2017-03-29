@@ -112,9 +112,9 @@ fi
         certificate_path="$CONFIGDIR/cert.crt"
         key_path="$CONFIGDIR/cert.key"
 
-#	ssl="no"
-#	certificate_path=""
-#	key_path=""
+	ssl="no"
+	certificate_path=""
+	key_path=""
 
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
 
