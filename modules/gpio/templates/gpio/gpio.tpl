@@ -68,7 +68,7 @@ function setGPIOstate(pin)
 			          <h3 class="panel-title">GPIO available</h3>
         		</div>
 		 <div class="panel-body" style="margin: auto">
-	<img style="max-width: 80%" src="/static/images/gpio.png">
+	<img style="max-width: 80%" src="/static/images/gpio40.png">
 	</div>
 </div>
 
