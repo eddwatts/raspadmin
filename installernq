@@ -107,8 +107,8 @@ if [ "$installdir" == "" ] ; then
 
 	 ssl=yes
         openssl genrsa  -out $CONFIGDIR/cert.key 1024
-        openssl req -new -key $CONFIGDIR/cert.key -out $CONFIGDIR/cert.csr
-        openssl x509 -req -days 4000 -subj '/C=XX/ST=YY/L=ZZ/CN=VV' -in $CONFIGDIR/cert.csr -signkey $CONFIGDIR/cert.key -out $CONFIGDIR/cert.crt
+        openssl req -subj '/C=XX/ST=YY/L=ZZ/CN=VV' -new -key $CONFIGDIR/cert.key -out $CONFIGDIR/cert.csr
+        openssl x509 -req -days 4000 -in $CONFIGDIR/cert.csr -signkey $CONFIGDIR/cert.key -out $CONFIGDIR/cert.crt
         rm -f $CONFIGDIR/cert.csr
         certificate_path="$CONFIGDIR/cert.crt"
         key_path="$CONFIGDIR/cert.key"
