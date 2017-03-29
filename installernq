@@ -9,31 +9,6 @@ CONFIGDIR="/etc/raspadmin"
 #############################################################
 # Functions
 #############################################################
-function ask_question {
-    message=$1
-    has_constraints=0
-    if [ "$2" !=  "" ] ; then
-        constraints=$2
-        has_constraints=1
-    fi
-    not_valid=1
-    while [ $not_valid -ne 0 ] ; do
-        echo -en  $message
-        read var
-        not_valid=0
-        if [ $has_constraints -ne 0 ]; then
-            not_valid=1
-            for i in $(echo $constraints | sed -e "s/;/ /g"); do
-                if [ "$var" == "$i" ]; then
-                    ask_question=$var
-                    return
-                fi
-            done
-        fi
-    done
-    ask_question=$var
-}
-
 function get_boolean_value {
     mess=$(expr substr $1 1 1)
     if [ "$mess" == "y" ] || [ "$mess" == "Y" ] ; then
@@ -122,60 +97,25 @@ NO_CONSTRAINTS="y;Y;n;N;No;NO;no;yes;Yes;YEs;YES"
 installdir=""
 
 if [ -f /etc/raspadmin/raspadmin.conf ] ; then
-	echo -e "Setup has detected an existing configuration file"
-	ask_question "Would you like to keep it ? [y/n] [ \e[31mSelection y if you just want to update\e[0m ] : " $NO_CONSTRAINTS
-	answer=$(get_boolean_value $ask_question)
-	if [ $answer -eq 1 ] ; then
 		installdir=$(read_ini_file "/etc/raspadmin/raspadmin.conf" "staticfiledir" | sed -e "s/static//g")
-	fi
 fi
 
 if [ "$installdir" == "" ] ; then
-	ask_question "Please enter the default home directory for user [ $DEFAULTINSTALLDIR ] : "
-	installdir=$ask_question
-	[[ "$installdir" == "" ]] && installdir=$DEFAULTINSTALLDIR
-	
-	ask_question "Please enter the port [ $DEFAULTPORT ] : "
-	port=$ask_question
-	[[ "$port" == "" ]] && port=$DEFAULTPORT
-	
-	ask_question "Use SSL [y/n] : " $NO_CONSTRAINTS
-	ssl=$(get_boolean_value $ask_question)
-
+	installdir=$DEFAULTINSTALLDIR
+	port=$DEFAULTPORT
 	[[ ! -d $CONFIGDIR ]] && mkdir $CONFIGDIR
+#	ssl=yes
+#        openssl genrsa  -out $CONFIGDIR/cert.key 1024
+#        openssl req -new -key $CONFIGDIR/cert.key -out $CONFIGDIR/cert.csr
+#        openssl x509 -req -days 4000 -in $CONFIGDIR/cert.csr -signkey $CONFIGDIR/cert.key -out $CONFIGDIR/cert.crt
+#        rm -f $CONFIGDIR/cert.csr
+#        certificate_path="$CONFIGDIR/cert.crt"
+#        key_path="$CONFIGDIR/cert.key"
 
-	
-	if [ "$ssl" == "1" ] ; then 
-		ssl=yes
-		ask_question "Do you have your own certificate  [y/n] : " $NO_CONSTRAINTS
-		owncert=$(get_boolean_value $ask_question)
+	ssl="no"
+	certificate_path=""
+	key_path=""
 
-		if [ $owncert -eq 1 ] ; then
-			certificate_path="/"
-			while [ ! -f "$certificate_path" ] ; do 
-				ask_question "Path to your certificate : "
-				certificate_path=$ask_question
-				[[ -f $certificate_path ]] || echo "Invalid path"
-			done
-			key_path="/"
-			while [ ! -f "$key_path" ] ; do
-				ask_question "Path to your private key : "
-				key_path=$ask_question
-				[[ -f $key_path ]] || echo "Invalid path"
-			done
-		else
-                        openssl genrsa  -out $CONFIGDIR/cert.key 1024
-                        openssl req -new -key $CONFIGDIR/cert.key -out $CONFIGDIR/cert.csr
-                        openssl x509 -req -days 4000 -in $CONFIGDIR/cert.csr -signkey $CONFIGDIR/cert.key -out $CONFIGDIR/cert.crt
-                        rm -f $CONFIGDIR/cert.csr
-                        certificate_path="$CONFIGDIR/cert.crt"
-                        key_path="$CONFIGDIR/cert.key"
-		fi
-	else
-		ssl="no"
-		certificate_path=""
-		key_path=""
-	fi
 
 	
 	sed -e "s#\$PORT#$port#" -e "s#\$INSTALLDIR#$installdir#" -e "s#\$CERT#$certificate_path#" -e "s#\$KEY#$key_path#" -e "s#\$SSL#$ssl#"  conf/raspadmin.conf > $CONFIGDIR/raspadmin.conf
