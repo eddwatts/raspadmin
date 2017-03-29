@@ -138,8 +138,6 @@ echo ""
 echo "----- File copy"
 [[ -d "$installdir" ]] ||  mkdir $installdir
 cp -R sources/* $installdir
-cd /home/pi/raspadmin/modules
-./updater
 #cd /home/pi/raspadmin/modules/gpio/conf
 #cp -Rf * /etc/raspadmin
 #cd /home/pi/raspadmin/modules/gpio/sources
